@@ -11,7 +11,7 @@ class MyLoginView:
 
 
 urlpatterns = [
-    path('', views.index, name="main"),
+    path('', views.index, name="index"),
     path("post/<str:name>/<int:id>/", views.post, name="post"),
     path('about', views.about, name='about'),
     path('services', views.services, name='services'),
