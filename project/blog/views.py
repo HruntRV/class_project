@@ -1,10 +1,10 @@
-from django.contrib.auth import logout, login
+from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
 from django.views import View
-from .forms import PostForm, CommentForm, SubscribeForm
+from .forms import PostForm, CommentForm, SubscribeForm, RegistrationForm, UpdateForm
 from .models import Post, Category, Profile, Comment
 from django.db.models import Q
 
@@ -100,8 +100,8 @@ def create(request):
             post.user = request.user
             post.save()
             return index(request)
-
-    form = PostForm()
+    else:
+        form = PostForm()
     context = {'form': form}
     context.update(get_categories())
     return render(request, 'blog/create.html', context)
@@ -115,10 +115,9 @@ class MyLogoutView(View):
 
 @login_required
 def profile(request):
-    # profile_data = get_object_or_404(User, user=request.user)
-    # profile_data = Profile.objects.get(user=request.user)
-    # context = {'profile_data': profile_data}
-    context = {}
+    # profile_data = Profile.objects.get(user=request.id)
+    profile_data = get_object_or_404(Profile, user=request.user)
+    context = {'profile_data': profile_data}
     context.update(get_categories())
     return render(request, 'blog/profile.html', context)
 #
@@ -126,3 +125,79 @@ def profile(request):
 #     def get(self, request):
 #         login(request)
 #         return redirect('index')
+
+
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['Username']
+            first_name = form.cleaned_data['First_name']
+            last_name = form.cleaned_data['Last_name']
+            gender = form.cleaned_data['Gender']
+            email = form.cleaned_data['Mail']
+            phone = form.cleaned_data['Phone']
+            country = form.cleaned_data['Country']
+            city = form.cleaned_data['City']
+            password = form.cleaned_data['Password']
+            password_confirm = form.cleaned_data['Password_confirm']
+
+            if password == password_confirm:
+                new_user = User.objects.create_user(username=username, email=email, password=password)
+                new_user.first_name = first_name
+                new_user.last_name = last_name
+                new_user.save()
+
+                new_profile = Profile(user=new_user, gender=gender, phone=phone, country=country, city=city)
+                new_profile.save()
+                login(request, new_user) # автоматически логинимся
+
+                return redirect('registration_success')
+            else:
+                form.add_error('Password_confirm', "Passwords do not match")
+
+    else:
+        form = RegistrationForm()
+    context = {'form': form}
+    context.update(get_categories())
+    return render(request, "blog/registration.html", context)
+
+
+def registration_success(request):
+    context = {}
+    context.update(get_categories())
+    return render(request, 'blog/registration_success.html', context)
+
+
+def update_profile(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    if request.method == 'POST':
+        form = UpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user_form = form.save(commit=False)
+            user_form.save()
+            profile.gender = form.cleaned_data['Gender']
+            profile.phone = form.cleaned_data['Phone']
+            profile.country = form.cleaned_data['Country']
+            profile.city = form.cleaned_data['City']
+            profile.save()
+
+            if form.cleaned_data['password']:
+                user.set_password(form.cleaned_data['password'])
+                user.save()
+                update_session_auth_hash(request, user)
+
+            return redirect('profile')
+    else:
+        initial_data = {
+            'Gender': profile.gender,
+            'Phone': profile.phone,
+            'Country': profile.country,
+            'City': profile.city,
+        }
+        form = UpdateForm(instance=user, initial=initial_data)
+
+        context = {'form': form}
+        context.update(get_categories())
+        return render(request, "blog/update_profile.html", context)

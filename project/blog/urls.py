@@ -23,6 +23,9 @@ urlpatterns = [
     # path('login', LoginView.as_view(), name='blog_login'),
     path('logout', MyLogoutView.as_view(), name='blog_logout'),
     # path('login', MyLoginView.as_view(), name='blog_login'),
-    path('profile/', views.profile, name='profile')
+    path('profile/', views.profile, name='profile'),
+    path('registration', views.registration, name='registration'),
+    path('registration_success', views.registration_success, name='registration_success'),
+    path('update_profile', views.update_profile, name='update_profile')
 
 ]

@@ -1,7 +1,17 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 {% block content %}
 <h1> Your Profile</h1>
-<img src="{{ profile_data.avatar }}">
-<p>First name: {{ user.username }}</p>
-<p>Last name: {{ user.email }}</p>
+<img class="profile-img" src="{{ profile_data.avatar }}">
+<div>
+<p>Username: {{ profile_data.user.username }}</p>
+<p>First name: {{ profile_data.user.first_name }}</p>
+<p>Last name: {{ profile_data.user.last_name }}</p>
+<p>Gender: {{ profile_data.gender }}</p>
+<p>Email: {{ profile_data.user.email }}</p>
+<p>Phone: {{ profile_data.phone }}</p>
+<p>Country: {{ profile_data.country }}</p>
+<p>City: {{ profile_data.city }}</p>
+</div>
+<a class="btn btn-primary" href="{% url 'update_profile' %}">Update profile<span class="glyphicon glyphicon-chevron-right"></span></a>
 {% endblock %}

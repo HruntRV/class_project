@@ -1,0 +1,50 @@
+h1 {
+    color: #333;
+}
+
+h2 {
+    color: #666;
+}
+
+a {
+    margin-right: 10px;
+}
+.profile-img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+    object-fit: cover;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px; /* Adds some padding inside the container */
+    border: 1px solid #ddd; /* Adds a border around the container */
+    border-radius: 10px; /* Rounds the corners of the border */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for better visual depth */
+    background-color: #f9f9f9; /* Adds a background color to the container */
+.form-group {
+        margin-bottom: 15px;
+    }
+.form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+.form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+}
+.form-button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+}
+.form-button:hover {
+        background-color: #0056b3;
+}

@@ -7,7 +7,7 @@
 <h1>{{ post.title }}</h1>
 <!-- Author -->
 <p class="lead">
-    by <a href="#">Start Bootstrap</a>
+    by <a href="{% url 'profile' %}">{{ post.user }}</a>
 </p>
 <hr>
 <!-- Date/Time -->
@@ -19,6 +19,7 @@
 <!-- Post Content -->
 <p class="lead"> {{ post.content }}</p>
 
+{% if user.is_authenticated %}
 <!-- Comments Form -->
 <form class="well" role="form" name="query" action="{% url 'post' name=post.title id=post.id %}" method="POST">
     {% csrf_token %}
@@ -28,7 +29,7 @@
     </div>
     <button type="submit" value="save" class="btn btn-primary">Submit</button>
 </form>
-
+{% endif %}
 <hr>
 
 <!-- Posted Comments -->

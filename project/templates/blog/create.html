@@ -1,13 +1,33 @@
 {% extends 'blog/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
+
 <h1>Add new post</h1>
-<form action="{% url 'create' %}" method="POST">
+<form class="form-container" action="{% url 'create' %}" method="POST">
     {% csrf_token %}
-    {{ form|crispy }}
-    <input type="submit" value="save" class="btn-default">
+    <div class="form-group">
+    {{ form.title.label_tag }}
+        {{ form.title }}
+    </div>
+
+    <div class="form-group">
+    {{ form.content.label_tag }}
+        {{ form.content }}
+    </div>
+
+    <div class="form-group">
+    {{ form.category.label_tag }}
+        {{ form.category }}
+    </div>
+
+    <div class="form-group">
+    {{ form.image.label_tag }}
+        {{ form.image }}
+    </div>
+    <input type="submit" value="save" class="form-button">
 
 
-</form>>
+</form>
 
 {% endblock %}

@@ -6,12 +6,13 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # avatar = models.ImageField(upload_to='user_avatar')
     avatar = models.URLField(default="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png")
-    first_name = models.CharField(max_length=20, blank=True)
-    last_name = models.CharField(max_length=20, blank=True)
     phone = models.CharField(max_length=15, blank=True)
+    country = models.CharField(max_length=25, blank=True)
+    city = models.CharField(max_length=30, blank=True)
+    gender = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return self.username
+        return self.user.username
 
 
 class Category(models.Model):
@@ -30,7 +31,7 @@ class Post(models.Model):
     content = models.TextField(verbose_name="Опис")
     published_date = models.DateTimeField(auto_created=True, verbose_name="Дата публікації")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категорія")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор", null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Автор", blank=True)
     image = models.URLField(default="http://placehold.it/900x300")
 
     def __str__(self):
@@ -42,13 +43,13 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    user = models.TextField(max_length=20, verbose_name='Користувач')
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, default=1)
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публікації')
     content = models.TextField(verbose_name='Коментар')
     post = models.ForeignKey(Post, max_length=30, verbose_name="Заголовок", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Comment by {self.user} on {self.post}"
+        return f"Comment by {self.author} on {self.post}"
 
 
 class Subscribe(models.Model):

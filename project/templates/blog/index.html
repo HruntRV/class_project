@@ -11,7 +11,7 @@
     <a href="{% url 'post' name=post.title id=post.id %}">{{post.title}}</a>
 </h2>
 <p class="lead">
-    by <a href="index.php">Start Bootstrap</a>
+    by <a href="{% url 'profile' %}">{{ post.user }}</a>
 </p>
 <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
 <hr>
