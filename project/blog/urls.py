@@ -4,12 +4,6 @@ from .import views
 from .views import MyLogoutView
 
 
-class MyLoginView:
-    @classmethod
-    def as_view(cls):
-        pass
-
-
 urlpatterns = [
     path('', views.index, name="index"),
     path("post/<str:name>/<int:id>/", views.post, name="post"),

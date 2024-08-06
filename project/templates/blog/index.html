@@ -1,9 +1,8 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-<h1 class="page-header">
-    Page Heading
-    <small>Secondary Text</small>
-</h1>
+{% load static %}
+
+
 {% for post in posts %}
 
 <!-- First Blog Post -->
@@ -15,7 +14,7 @@
 </p>
 <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
 <hr>
-<img class="img-responsive" src="{{post.image}}" alt="">
+<img class="img-responsive" src="{{post.image.url}}" alt="">
 <hr>
 <p> {{ post.content|truncatewords:20 }}</p>
 <a class="btn btn-primary" href="{% url 'post' name=post.title id=post.id %}">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>

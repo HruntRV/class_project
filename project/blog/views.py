@@ -21,14 +21,14 @@ def get_categories():
 def category(request, c=None):
     cObj = get_object_or_404(Category, name=c)
     posts = Post.objects.filter(category=cObj).order_by("-published_date")
-    context = {'posts': posts}
+    context = {'post_images': posts}
     context.update(get_categories())
     return render(request, 'blog/index.html', context)
 
 
 def index(request):
     posts = Post.objects.all().order_by("-published_date")
-    # posts = Post.objects.filter(title__contains="News")
+    # post_images = Post.objects.filter(title__contains="News")
     context = {'posts': posts}
     context.update(get_categories())
     return render(request, 'blog/index.html', context)
@@ -42,6 +42,7 @@ def post(request, name=None, id=None):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
+            comment.author = request.user.profile
             comment.save()
             return redirect('post', name=post.title, id=post.id)
     else:
@@ -84,7 +85,8 @@ def contact(request):
 def search(request):
     query = request.GET.get('query')
     posts = Post.objects.filter(Q(content__icontains=query) | Q(title__icontains=query))
-    # posts = Post.objects.all().order_by("-published_date")
+    # post_images = Post.objects.all().order_by("-published_date")
+    # context = {'post_images': posts}
     context = {'posts': posts}
     context.update(get_categories())
     return render(request, 'blog/index.html', context)
@@ -93,13 +95,14 @@ def search(request):
 @login_required
 def create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.published_date = now()
             post.user = request.user
+            post.image = form.cleaned_data['image']
             post.save()
-            return index(request)
+            return redirect('index')
     else:
         form = PostForm()
     context = {'form': form}
@@ -173,7 +176,8 @@ def update_profile(request):
     user = request.user
     profile = Profile.objects.get(user=user)
     if request.method == 'POST':
-        form = UpdateForm(request.POST, instance=request.user)
+        form = UpdateForm(request.POST, request.FILES, instance=request.user)
+
         if form.is_valid():
             user_form = form.save(commit=False)
             user_form.save()
@@ -181,6 +185,7 @@ def update_profile(request):
             profile.phone = form.cleaned_data['Phone']
             profile.country = form.cleaned_data['Country']
             profile.city = form.cleaned_data['City']
+            profile.avatar = form.cleaned_data['Avatar']
             profile.save()
 
             if form.cleaned_data['password']:

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 from .models import Post, Profile, Comment, Subscribe
 
@@ -19,7 +20,7 @@ class ProfileForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['author', 'content']
+        fields = ['content']
 
 
 class SubscribeForm(forms.ModelForm):
@@ -102,13 +103,32 @@ class UpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password']
         widgets = {
-            'password': forms.PasswordInput(),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
         }
 
-    Gender = forms.ChoiceField(choices=gender_choice)
-    Phone = forms.CharField(max_length=15)
-    Country = forms.CharField(max_length=50)
-    City = forms.ChoiceField(choices=city_choice)
-    Password_confirm = forms.CharField(widget=forms.PasswordInput(), required=False)
+    Gender = forms.ChoiceField(choices=gender_choice, widget=forms.Select(attrs={'class': 'form-control'}))
+    Phone = forms.CharField(max_length=15, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    Country = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    City = forms.ChoiceField(choices=city_choice, widget=forms.Select(attrs={'class': 'form-control'}))
+    Password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    Avatar = forms.ImageField(
+        required=False,
+        label='Profile Picture',
+        help_text='Upload a profile picture.',
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+    )
+
+
+# class ProfileForm(ModelForm):
+#     class Meta:
+#         model = ProfileImage
+#         fields = ['profile_image', 'description']
+
+
+
 
 

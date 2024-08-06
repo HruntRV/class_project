@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<h1>Contact</h1>
+<h3>Subscribe to our mail list</h3>
 <form class="well" role="form" name="query" action="{% url 'contacts' %}" method="POST">
   {% csrf_token %}
   {{ form|crispy }}

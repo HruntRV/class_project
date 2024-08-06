@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # avatar = models.ImageField(upload_to='user_avatar')
-    avatar = models.URLField(default="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png")
+    avatar = models.ImageField(upload_to='user_avatar')
+    # avatar = models.URLField(default="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png")
     phone = models.CharField(max_length=15, blank=True)
     country = models.CharField(max_length=25, blank=True)
     city = models.CharField(max_length=30, blank=True)
@@ -27,12 +27,13 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=30, verbose_name="Заголовок")
+    title = models.CharField(max_length=50, verbose_name="Заголовок")
     content = models.TextField(verbose_name="Опис")
     published_date = models.DateTimeField(auto_created=True, verbose_name="Дата публікації")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категорія")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Автор", blank=True)
-    image = models.URLField(default="http://placehold.it/900x300")
+    # image = models.URLField(default="http://placehold.it/900x300")
+    image = models.ImageField(upload_to='post_images')
 
     def __str__(self):
         return self.title
@@ -57,3 +58,11 @@ class Subscribe(models.Model):
 
     def __str__(self):
         return self.email
+
+
+# class ProfileImage(models.Model):
+#     profile_image = models.ImageField(upload_to='photos', verbose_name='Зображення профілю')
+#     user = models.OneToOneField(Post, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return 'profile image'
