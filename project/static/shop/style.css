@@ -1,0 +1,18 @@
+* {
+    margin:1px;
+    padding:1px;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+
+
+}
+
+.cart-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
