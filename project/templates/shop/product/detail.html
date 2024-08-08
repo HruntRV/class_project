@@ -4,11 +4,12 @@
     {% if category %}{{ category.title }}{% else %}Products{% endif %}
 {% endblock %}
 {% block content %}
-    <div class="product-detail">
+    <div class="container row-block">
+        <span class="container"><h1>{{ product.name }}</h1></span>
         <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
-        <h1>{{ product.name }}</h1>
-        <h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
-        <p class="price">${{ product.price }}</p>
+
+        <h6><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h6>
+        <p class="price"><h4>${{ product.price }}</h4></p>
         {{ product.description|linebreaks }}
         <form action="{% url 'cart:cart_add' product.id %}" method="POST">
             {% csrf_token %}
